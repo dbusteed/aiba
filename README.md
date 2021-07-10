@@ -1,4 +1,4 @@
-# Aiba -- lil CLI password manager
+# Aiba -- Lil CLI Password Manager
 
 
 ## Overview
@@ -7,17 +7,19 @@ Aiba (shortened form of *aikotoba*, the Japanese word for password), is a very b
 
 It doesn't use encryption, hashing, or anything fancy, so it's not neccessarily secure (other than secuirty protecting your computer), but it works fine for my needs
 
-It's also my first time using Rust, so it's probably written very poorly, haha. I also got tired of working on this so it's not very refactored, and lacks decent error handling
+I originally wrote this in Rust (just for the sake of playing with that language), but then rewrote it in Python after I had issues building it on a different system. Either way, it's not very advanced in terms of error handling, but works well for me
 
 <br>
 
 ## Installation
 
-```
+```sh
 $ git clone <THIS_REPO>
 $ cd aiba
-$ cargo build --release
-$ cp target/release/aiba /somewhere/on/your/path
+$ pip install pyperclip
+$ sudo apt install xclip  # required if on Linux
+$ chmod +x aiba
+$ cp aiba /somewhere/on/your/path
 ```
 
 <br>

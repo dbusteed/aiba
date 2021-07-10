@@ -1,0 +1,76 @@
+#!/usr/bin/python3
+
+import os
+import pyperclip
+import sys
+
+clear = lambda: os.system('clear')
+
+if os.environ.get('HOME'):
+    aiba_path = os.path.join(os.environ.get('HOME'), '.aiba')
+else:
+    raise Exception('Unable to find $HOME directory, please set this env var')
+
+aiba = open(aiba_path, 'r').read()
+
+entries = {str(idx+1): a.split(',') for idx, a in enumerate(aiba.split('\n'))}
+
+clear()
+print()
+
+for idx, ent in entries.items():
+    print(f' {idx}. {ent[0]}')
+
+print('\n Enter command, get (h)elp, or (q)uit')
+choice = input(' >>> ').lower()
+
+print()
+
+cmd = choice[0]
+if len(choice) > 1:
+    opt = choice[1:]
+
+if cmd.isdigit():
+    opt = cmd
+    cmd = 'p'
+
+if cmd == 'h':
+    print('  Copy passwords and other information to your clipboard')
+    print('  by entering a \"command\" followed by an item number')
+    print('\n  For example, to copy the username for the 4th entry, you would')
+    print('  enter \"u4\". The default command is \"p\" (password), so to copy')
+    print('  the password for the 4th entry, you would just enter \"4\"')
+    print('\n  Available commands:')
+    print('    l -- copy location')
+    print('    u -- copy username')
+    print('    p -- copy password (this is default, and can be left out)')
+    print('    v -- view all details (not copied to clipboard)')
+    print('    q -- quit')
+    print('\n  The credential file is located here:')
+    print(f'    {aiba_path}')
+    print('\n  It\'s formatted like a CSV file, with the following layout:')
+    print('    name,location,username,password')
+    print('\n  An example would look like this:')
+    print('    GitHub,https://github.com/login,bob,MyP@ssw0rd')
+    sys.exit(0)
+
+elif cmd == 'q':
+    sys.exit(0)
+
+elif cmd == 'l':
+    print(f' Copied location for {entries[opt][0]}')
+    pyperclip.copy(entries[opt][1])
+
+elif cmd == 'u':
+    print(f' Copied username for {entries[opt][0]}')
+    pyperclip.copy(entries[opt][2])
+
+elif cmd == 'p':
+    print(f' Copied password for {entries[opt][0]}')
+    pyperclip.copy(entries[opt][3])
+
+elif cmd == 'v':
+    print(f' {entries[opt][0]}')
+    for i in range(1, 4):
+        if entries[opt][i]:
+            print(f'  {entries[opt][i]}')
