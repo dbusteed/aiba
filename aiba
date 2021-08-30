@@ -13,26 +13,38 @@ else:
 
 aiba = open(aiba_path, 'r').read()
 
-entries = {str(idx+1): a.split(',') for idx, a in enumerate(aiba.split('\n'))}
+raw_entries = [a for a in aiba.split('\n') if a]
+entries = {str(idx+1): a.split(',') for idx, a in enumerate(raw_entries)}
 
 clear()
 print()
 
 for idx, ent in entries.items():
-    print(f' {idx}. {ent[0]}')
+    print(f' {idx:>2}  {ent[0]}')
 
 print('\n Enter command, get (h)elp, or (q)uit')
-choice = input(' >>> ').lower()
+ans = input(' >>> ').lower()
 
 print()
 
-cmd = choice[0]
-if len(choice) > 1:
-    opt = choice[1:]
-
-if cmd.isdigit():
-    opt = cmd
+# parse the 'command' and the 'option'
+if ans.isdigit():
+    opt = ans
     cmd = 'p'
+else:
+    if len(ans) == 1:
+        if ans in ('h', 'q'):
+            cmd = ans
+        else:
+            print('Unknown command, view help menu for info')
+    else:
+        cmd = ans[0]
+        opt = ans[1:]
+        if cmd in ('l', 'u', 'p', 'v') and opt.isdigit():
+            pass
+        else:
+            print('Unknown command, view help menu for info')
+    
 
 if cmd == 'h':
     print('  Copy passwords and other information to your clipboard')
@@ -71,6 +83,6 @@ elif cmd == 'p':
 
 elif cmd == 'v':
     print(f' {entries[opt][0]}')
-    for i in range(1, 4):
+    for l, i in zip([' loc', 'user', 'pass'], range(1, 4)):
         if entries[opt][i]:
-            print(f'  {entries[opt][i]}')
+            print(f'   {l}: {entries[opt][i]}')
